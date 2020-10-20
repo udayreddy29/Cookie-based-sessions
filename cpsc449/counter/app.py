@@ -20,7 +20,6 @@ if app.config.get('USE_SESSION_STORE'):
 @app.route('/')
 def show_form():
     count = session.get('count', 0)
-    print('count is', count)
     count += 1
     session['count'] = count
 
