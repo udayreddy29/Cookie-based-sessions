@@ -36,21 +36,21 @@ class KeyValueSessionStore(SessionStore):
 
     def set_key(self, key, value):
         current = self.get_key(key)
-        t = current.get('count', 0)
-        if t == None:
+        count = current.get('count', 0)
+        if count == None:
             payload = {
                 key: 1
             }
         else:
             payload = {
-                key: t + 1
+                key: count + 1
             }
         requests.post(self.url, data=payload)
 
     def get_key(self, key):
         requestUrl = self.url + '/' + key
-        r = requests.get(requestUrl)
-        count = r.json().get(key)
+        session = requests.get(requestUrl)
+        count = session.json().get(key)
         if count == None:
             return {
                 'count': 0
