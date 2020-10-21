@@ -49,7 +49,6 @@ class KeyValueSessionStore(SessionStore):
     def delete_key(self, key):
         requestUrl = self.url + '/' + key
         deleteKeyResponse = requests.delete(requestUrl)
-        self.logger.debug("delete '%s'", r.json())
         return deleteKeyResponse.json()
 
 
