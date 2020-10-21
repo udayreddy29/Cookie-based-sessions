@@ -46,32 +46,18 @@ def set_key():
         req = request.form
     for key in req.keys():
         get_db()[key] = req[key]
-        print('get db is', get_db())
     return jsonify(req)
-
-
-@app.route('/getDetails', methods=['GET'])
-def get_details():
-    details = get_db()
-    print("details are", details)
-    return details
 
 # Get
 # http $DB_URL/foo
-
-
 @app.route('/<key>', methods=['GET'])
 def get_key(key):
-    print('get db is get', get_db())
     return jsonify({key: get_db().get(key)})
 
 # Delete
 # http DELETE $DB_URL/foo
-
-
 @app.route('/<key>', methods=['DELETE'])
 def delete_key(key):
-    print('clicked on delete')
     return jsonify({key: get_db().pop(key, None)})
 
 

@@ -32,12 +32,11 @@ class KeyValueSessionStore(SessionStore):
 
     def __init__(self, url, logger=None):
         super().__init__(logger)
-        self.logger.debug('url is %s', url)
+        self.url = url
 
     def set_key(self, key, value):
         current = self.get_key(key)
         t = current.get('count', 0)
-        self.logger.debug("value of t is '%s'", type(t))
         if t == None:
             payload = {
                 key: 1
@@ -46,13 +45,11 @@ class KeyValueSessionStore(SessionStore):
             payload = {
                 key: t + 1
             }
-        r = requests.post("http://localhost:5100/", data=payload)
-        self.logger.debug(" after set key '%s'", r.json())
+        requests.post(self.url, data=payload)
 
     def get_key(self, key):
-        url = 'http://localhost:5100/' + key
-        r = requests.get(url)
-        self.logger.debug("get key '%s'", r.json())
+        requestUrl = self.url + '/' + key
+        r = requests.get(requestUrl)
         count = r.json().get(key)
         if count == None:
             return {
@@ -63,9 +60,8 @@ class KeyValueSessionStore(SessionStore):
         }
 
     def delete_key(self, key):
-        url = 'http://localhost:5100/' + key
-        r = requests.delete(url)
-        self.logger.debug('printing r %s', r.json())
+        requestUrl = self.url + '/' + key
+        requests.delete(requestUrl)
 
 
 class ServerSideSession(CallbackDict, SessionMixin):
