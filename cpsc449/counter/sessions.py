@@ -31,33 +31,19 @@ class SessionStore:
 class KeyValueSessionStore(SessionStore):
 
     def __init__(self, url, logger=None):
-        super().__init__(logger)
         self.url = url
+        super().__init__(logger)
 
     def set_key(self, key, value):
-        current = self.get_key(key)
-        count = current.get('count', 0)
-        if count == None:
-            payload = {
-                key: 1
-            }
-        else:
-            payload = {
-                key: count + 1
-            }
-        requests.post(self.url, data=payload)
+        payload = {
+            key: value
+        }
+        requests.post(self.url, json=payload)
 
     def get_key(self, key):
         requestUrl = self.url + '/' + key
-        session = requests.get(requestUrl)
-        count = session.json().get(key)
-        if count == None:
-            return {
-                'count': 0
-            }
-        return {
-            'count': int(count)
-        }
+        getKeyResponse = requests.get(requestUrl)
+        return getKeyResponse.json().get(key)
 
     def delete_key(self, key):
         requestUrl = self.url + '/' + key
