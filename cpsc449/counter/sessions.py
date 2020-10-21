@@ -38,7 +38,8 @@ class KeyValueSessionStore(SessionStore):
         payload = {
             key: value
         }
-        requests.post(self.url, json=payload)
+        setKeyResponse = requests.post(self.url, json=payload)
+        return setKeyResponse.json()
 
     def get_key(self, key):
         requestUrl = self.url + '/' + key
@@ -47,7 +48,9 @@ class KeyValueSessionStore(SessionStore):
 
     def delete_key(self, key):
         requestUrl = self.url + '/' + key
-        requests.delete(requestUrl)
+        deleteKeyResponse = requests.delete(requestUrl)
+        self.logger.debug("delete '%s'", r.json())
+        return deleteKeyResponse.json()
 
 
 class ServerSideSession(CallbackDict, SessionMixin):
